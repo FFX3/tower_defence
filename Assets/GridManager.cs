@@ -1,23 +1,43 @@
+using System;
 using System.Collections;
 using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
+
 using static Cell;
+using static GridSystem;
 
 public class GridManager : MonoBehaviour
 {
+    private List<Type> systems = new List<Type>() {
+        typeof(MakeCellRed)
+    };
     private List<List<GameObject>> cells;
 
     // Start is called before the first frame update
     void Start()
     {
         this.buildGrid();
+        this.mountSystemListeners();
     }
 
     // Update is called once per frame
     void Update()
     {
         this.checkForMouseClicks();
+    }
+
+    public List<Cell> getCells(){
+        return this.cells.SelectMany(x=>x).ToList().ConvertAll<Cell>(x=>x.GetComponent<Cell>());
+    }
+
+    public void mountSystemListeners(){
+        foreach(Type system in this.systems){
+            // TODO move instantiation to the game state singleton
+            GridSystem systemInstance = (GridSystem) ScriptableObject.CreateInstance(system);
+            systemInstance.mount(this);
+        }
     }
 
     private void buildGrid(){
