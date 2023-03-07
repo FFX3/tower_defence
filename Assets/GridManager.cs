@@ -10,9 +10,8 @@ using static GridSystem;
 
 public class GridManager : MonoBehaviour
 {
-    private List<Type> systems = new List<Type>() {
-        typeof(MakeCellRed)
-    };
+    [SerializeField]
+    private List<GridSystem> systems;
     private List<List<GameObject>> cells;
 
     // Start is called before the first frame update
@@ -33,10 +32,8 @@ public class GridManager : MonoBehaviour
     }
 
     public void mountSystemListeners(){
-        foreach(Type system in this.systems){
-            // TODO move instantiation to the game state singleton
-            GridSystem systemInstance = (GridSystem) ScriptableObject.CreateInstance(system);
-            systemInstance.mount(this);
+        foreach(GridSystem system in this.systems){
+            system.mount(this);
         }
     }
 
