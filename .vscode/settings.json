@@ -2,6 +2,7 @@
     "files.exclude": {
         "**/*.meta": true,
         "**/*.unity": true,
-        "**/*.unity.meta": true
+        "**/*.unity.meta": true,
+        "**/*.asset": true
     }
 }

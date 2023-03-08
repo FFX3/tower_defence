@@ -251,3 +251,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   systems:
   - {fileID: 11400000, guid: 8f111e74388647f44b185ab46e884511, type: 2}
+  gridWidth: 9
+  gridHeight: 9

@@ -1,9 +1,7 @@
 using System;
-using System.Collections;
 using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 
 using static Cell;
 using static GridSystem;
@@ -13,6 +11,11 @@ public class GridManager : MonoBehaviour
     [SerializeField]
     private List<GridSystem> systems;
     private List<List<GameObject>> cells;
+
+    [SerializeField]
+    private int gridWidth;
+    [SerializeField]
+    private int gridHeight;
 
     // Start is called before the first frame update
     void Start()
@@ -40,9 +43,9 @@ public class GridManager : MonoBehaviour
     private void buildGrid(){
        
         this.cells = new List<List<GameObject>>();
-        for (int x = 0; x < 5; x++){
+        for (int x = 0; x < this.gridWidth; x++){
             List<GameObject> column = new List<GameObject>();
-            for (int y = 0; y < 5; y++){
+            for (int y = 0; y < this.gridHeight; y++){
                 column.Add(this.buildCell(new Vector2(x, y)));
             }
             this.cells.Add(column);
