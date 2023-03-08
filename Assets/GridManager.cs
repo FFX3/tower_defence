@@ -30,7 +30,7 @@ public class GridManager : MonoBehaviour
         this.checkForMouseClicks();
     }
 
-    public List<Cell> getCells(){
+    public IEnumerable<Cell> getCells(){
         return this.cells.SelectMany(x=>x).ToList().ConvertAll<Cell>(x=>x.GetComponent<Cell>());
     }
 
