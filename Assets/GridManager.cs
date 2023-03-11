@@ -21,7 +21,8 @@ public class GridManager : MonoBehaviour
     void Start()
     {
         this.buildGrid();
-        this.mountSystemListeners();
+        this.mountSystems();
+        
     }
 
     // Update is called once per frame
@@ -34,7 +35,7 @@ public class GridManager : MonoBehaviour
         return this.cells.SelectMany(x=>x).ToList().ConvertAll<Cell>(x=>x.GetComponent<Cell>());
     }
 
-    public void mountSystemListeners(){
+    public void mountSystems(){
         foreach(GridSystem system in this.systems){
             system.mount(this);
         }

@@ -8,6 +8,11 @@ using static Cell;
 
 [CreateAssetMenu(fileName = "cell_red", menuName = "ScriptableObjects/GridSystems/MakeCellRed", order = 1)]
 public class MakeCellRed: GridSystem {
+
+        [SerializeField]
+    private GameObject redCircle;
+
+
     public override void mount(GridManager gridManager){
         foreach(Cell cell in gridManager.getCells()){
             cell.subscribeToClicked(this.makeCellRed);
@@ -20,6 +25,7 @@ public class MakeCellRed: GridSystem {
 
     private void makeCellRed(Cell cell){
         Debug.Log(cell.gameObject.transform.position);
-        // TODO change cell color to red
+        GameObject ballista = Instantiate(this.redCircle);
+        ballista.transform.position = cell.gameObject.transform.position;
     }
 }
