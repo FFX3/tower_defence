@@ -3,6 +3,7 @@
         "**/*.meta": true,
         "**/*.unity": true,
         "**/*.unity.meta": true,
-        "**/*.asset": true
+        "**/*.asset": true,
+        "**/*.prefab": true
     }
 }
