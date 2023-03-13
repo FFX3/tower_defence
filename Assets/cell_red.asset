@@ -12,3 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26502657fa8e8a848a1627778f08cca6, type: 3}
   m_Name: cell_red
   m_EditorClassIdentifier: 
+  redCircle: {fileID: 899325441144797894, guid: f7b272c4cb82a0d48b14901164043cc1, type: 3}
