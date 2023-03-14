@@ -1,10 +1,8 @@
 using System;
-using UnityEngine;
-using UnityEngine.Events;
+using System.Collections.Generic;
 
-using static GridSystem;
-using static GridManager;
-using static Cell;
+using UnityEngine;
+
 using static WaypointNode;
 
 
@@ -20,7 +18,7 @@ public class WaypointList{
         this.currentnode = head;
     }
 
-    public AddWaypoint(int x, int y){
+    public void AddWaypoint(int x, int y){
         if(x!=0 && y!=0){
             throw new Exception("A Waypoint's x and y are both non-null");
         }
@@ -28,22 +26,31 @@ public class WaypointList{
             throw new Exception("A Waypoint's x and y are both null");
         }
         bool is_x_axis = x!=0;
+        var currentAxis = is_x_axis ? "x" : "y";
+        var perpendicularAxis = is_x_axis ? "y" : "x";
+        int movement_on_axis = is_x_axis ? x : y;
 
-        var pastx = deadend.nodecoordinate.x;
-        var newx = pastx+x;
         var deadend = this.deadends[0];
-        if(this.deadends[0].previousnodes.length != 0){
-
-            
-            var deadendsPreviousNode = deadends.previousnodes[0];
-            if(deadend.nodecoordinate.x != deadendsPreviousNode.nodecoordinate.x){
-                if(Math.Clamp(newx - deadend.nodecoordinate.x) == Math.Clamp(deadendsPreviousNode.nodecoordinate.x - deadend.nodecoordinate.x)) {
+        var past_position_on_axis = (int) deadend.coordinate.GetType().GetProperty(currentAxis).GetValue(deadend.coordinate, null);
+        var new_position_on_axis = past_position_on_axis+movement_on_axis;
+        if(this.deadends[0].previousnodes.Count != 0){
+            var deadendsPreviousNode = deadend.previousnodes[0];
+            var deadend_previous_node_position_on_axis = (int) deadendsPreviousNode.coordinate.GetType().GetProperty(currentAxis).GetValue(deadendsPreviousNode.coordinate, null);
+            if(past_position_on_axis != deadend_previous_node_position_on_axis){
+                if(Mathf.Clamp(new_position_on_axis - past_position_on_axis, 0, 1) 
+                   == Mathf.Clamp(deadend_previous_node_position_on_axis - past_position_on_axis, 0, 1)) {
                     throw new Exception("Cannot backtrack");
                 }
             }
         }
 
-        WaypointNode newWaypointNode = new WaypointNode(newx, deadends.nodecoordinate.y);
+        WaypointNode newWaypointNode; 
+        if(is_x_axis) {
+            newWaypointNode = new WaypointNode(new_position_on_axis, (int) deadends[0].coordinate.y);
+        } else {
+            newWaypointNode = new WaypointNode((int) deadends[0].coordinate.x, new_position_on_axis);
+        }
+
         newWaypointNode.previousnodes.Add(deadend);
         deadend.forwardnodes.Add(newWaypointNode);
         this.deadends[0] = newWaypointNode;

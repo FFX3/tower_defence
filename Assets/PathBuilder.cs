@@ -5,6 +5,7 @@ using UnityEngine.Events;
 using static GridSystem;
 using static GridManager;
 using static Cell;
+using static WaypointList;
 
 [CreateAssetMenu(fileName = "Path Builder", menuName = "ScriptableObjects/GridSystems/PathBuilder", order = 1)]
 public class PathBuilder: GridSystem {
@@ -13,7 +14,7 @@ public class PathBuilder: GridSystem {
     private GameObject pathblock;
 
     [SerializeField]
-    private List<Vector2> waypoints;
+    private WaypointList waypoints;
 
 
     public override void mount(GridManager gridManager){
@@ -26,11 +27,5 @@ public class PathBuilder: GridSystem {
 
     public override void unmount(){
 
-    }
-
-    private void makeCellRed(Cell cell){
-        Debug.Log(cell.gameObject.transform.position);
-        GameObject ballista = Instantiate(this.redCircle);
-        ballista.transform.position = cell.gameObject.transform.position;
     }
 }
