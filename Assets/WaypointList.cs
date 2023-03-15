@@ -13,6 +13,7 @@ public class WaypointList{
 
     public WaypointList(){
         var head = new WaypointNode(0,0);
+        this.deadends = new List<WaypointNode>();
         this.head = head;
         this.deadends.Add(head);
         this.currentnode = head;
@@ -29,12 +30,13 @@ public class WaypointList{
         var currentAxis = is_x_axis ? "x" : "y";
         var perpendicularAxis = is_x_axis ? "y" : "x";
         int movement_on_axis = is_x_axis ? x : y;
-
+            Debug.Log(this.deadends);
         var deadend = this.deadends[0];
         var past_position_on_axis = (int) deadend.coordinate.GetType().GetProperty(currentAxis).GetValue(deadend.coordinate, null);
         var new_position_on_axis = past_position_on_axis+movement_on_axis;
         if(this.deadends[0].previousnodes.Count != 0){
             var deadendsPreviousNode = deadend.previousnodes[0];
+            Debug.Log("2");
             var deadend_previous_node_position_on_axis = (int) deadendsPreviousNode.coordinate.GetType().GetProperty(currentAxis).GetValue(deadendsPreviousNode.coordinate, null);
             if(past_position_on_axis != deadend_previous_node_position_on_axis){
                 if(Mathf.Clamp(new_position_on_axis - past_position_on_axis, 0, 1) 
@@ -47,8 +49,10 @@ public class WaypointList{
         WaypointNode newWaypointNode; 
         if(is_x_axis) {
             newWaypointNode = new WaypointNode(new_position_on_axis, (int) deadends[0].coordinate.y);
+            Debug.Log("3");
         } else {
             newWaypointNode = new WaypointNode((int) deadends[0].coordinate.x, new_position_on_axis);
+            Debug.Log("4");
         }
 
         newWaypointNode.previousnodes.Add(deadend);
