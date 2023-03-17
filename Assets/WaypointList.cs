@@ -4,19 +4,20 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using static WaypointNode;
-
+using static WaypointSegmentCrawler;
 
 public class WaypointList{
-    private WaypointNode head;
+    public WaypointNode head;
     private List<WaypointNode> deadends;
-    private WaypointNode currentnode;
+
+    private Dictionary<string, WaypointNode> nodeByCoordinate;
 
     public WaypointList(){
         var head = new WaypointNode(0,0);
         this.deadends = new List<WaypointNode>();
         this.head = head;
         this.deadends.Add(head);
-        this.currentnode = head;
+        this.nodeByCoordinate = new Dictionary<string, WaypointNode>();
     }
 
     public void AddWaypoint(int x, int y){
@@ -30,14 +31,22 @@ public class WaypointList{
         var currentAxis = is_x_axis ? "x" : "y";
         var perpendicularAxis = is_x_axis ? "y" : "x";
         int movement_on_axis = is_x_axis ? x : y;
-            Debug.Log(this.deadends);
         var deadend = this.deadends[0];
-        var past_position_on_axis = (int) deadend.coordinate.GetType().GetProperty(currentAxis).GetValue(deadend.coordinate, null);
+        int past_position_on_axis;
+        if(is_x_axis){
+            past_position_on_axis = (int) deadend.coordinate.x;
+        } else {
+            past_position_on_axis = (int) deadend.coordinate.y;
+        }
         var new_position_on_axis = past_position_on_axis+movement_on_axis;
         if(this.deadends[0].previousnodes.Count != 0){
             var deadendsPreviousNode = deadend.previousnodes[0];
-            Debug.Log("2");
-            var deadend_previous_node_position_on_axis = (int) deadendsPreviousNode.coordinate.GetType().GetProperty(currentAxis).GetValue(deadendsPreviousNode.coordinate, null);
+            int deadend_previous_node_position_on_axis;
+            if(is_x_axis){
+                deadend_previous_node_position_on_axis = (int) deadendsPreviousNode.coordinate.x;
+            } else {
+                deadend_previous_node_position_on_axis = (int) deadendsPreviousNode.coordinate.y;
+            }
             if(past_position_on_axis != deadend_previous_node_position_on_axis){
                 if(Mathf.Clamp(new_position_on_axis - past_position_on_axis, 0, 1) 
                    == Mathf.Clamp(deadend_previous_node_position_on_axis - past_position_on_axis, 0, 1)) {
@@ -47,12 +56,19 @@ public class WaypointList{
         }
 
         WaypointNode newWaypointNode; 
+        Vector2 newCoordinate;
         if(is_x_axis) {
-            newWaypointNode = new WaypointNode(new_position_on_axis, (int) deadends[0].coordinate.y);
-            Debug.Log("3");
+            newCoordinate = new Vector2(new_position_on_axis, (int) deadends[0].coordinate.y);
         } else {
-            newWaypointNode = new WaypointNode((int) deadends[0].coordinate.x, new_position_on_axis);
-            Debug.Log("4");
+            newCoordinate = new Vector2((int) deadends[0].coordinate.x, new_position_on_axis);
+        }
+
+        string dictionaryKey = newCoordinate.x + "_" + newCoordinate.y;
+        if(this.nodeByCoordinate.ContainsKey(dictionaryKey)){
+            newWaypointNode = this.nodeByCoordinate[dictionaryKey];
+        } else {
+            newWaypointNode = new WaypointNode((int) newCoordinate.x, (int) newCoordinate.y);
+            this.nodeByCoordinate.Add(dictionaryKey, newWaypointNode);
         }
 
         newWaypointNode.previousnodes.Add(deadend);
@@ -60,4 +76,19 @@ public class WaypointList{
         this.deadends[0] = newWaypointNode;
     }
 
+    public static IEnumerable<WaypointNode> TraversePath(WaypointNode start) {
+        var currentNode = start;
+        while(currentNode.forwardnodes.Count > 0) {
+            if(currentNode.forwardnodes.Count == 1) {
+                var crawler = new WaypointSegmentCrawler(currentNode);
+                foreach(var node in crawler.Crawl()){
+                    currentNode = node;
+                    yield return node;
+                }
+            } else {
+                currentNode = currentNode.forwardnodes[0];
+                yield return currentNode;
+            }
+        }
+    }
 }

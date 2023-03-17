@@ -14,4 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pathblock: {fileID: 1879329047567629638, guid: b3971568bcccfd843912d4fdcd964930, type: 3}
   pathbuilderinputs:
-  - {x: 1, y: 0}
+  - {x: 9, y: 0}
+  - {x: 0, y: 3}
+  - {x: -8, y: 0}

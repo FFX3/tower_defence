@@ -24,7 +24,6 @@ public class MakeCellRed: GridSystem {
     }
 
     private void makeCellRed(Cell cell){
-        Debug.Log(cell.gameObject.transform.position);
         GameObject ballista = Instantiate(this.redCircle);
         ballista.transform.position = cell.gameObject.transform.position;
     }

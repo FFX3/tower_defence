@@ -19,15 +19,20 @@ public class PathBuilder: GridSystem {
 
 
     public override void mount(GridManager gridManager){
-    //Dire au gridManager que le pathbuilder a priorite
-    //On va avoir besoin des dimensions, peut pas mettre du path outside du grid
-    //Draw roads
+        //Dire au gridManager que le pathbuilder a priorite
+        //On va avoir besoin des dimensions, peut pas mettre du path outside du grid
+        //Draw roads
 
         var waypoints = new WaypointList();
-        var waypoint = this.pathbuilderinputs[0];
+        foreach(var coordinate in this.pathbuilderinputs){
+            waypoints.AddWaypoint((int)coordinate.x, (int)coordinate.y);
+        }
 
-        waypoints.AddWaypoint((int)waypoint.x, (int)waypoint.y);
-    
+
+        //DEBUG TEST
+        foreach(var waypoint in WaypointList.TraversePath(waypoints.head)) {
+            Debug.Log(waypoint.coordinate);
+        }
     }
 
     public override void unmount(){
