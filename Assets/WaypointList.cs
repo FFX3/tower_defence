@@ -76,7 +76,7 @@ public class WaypointList{
         this.deadends[0] = newWaypointNode;
     }
 
-    public static IEnumerable<WaypointNode> TraversePath(WaypointNode start) {
+    public static IEnumerable<WaypointNode> GetSegmentHeads(WaypointNode start) {
         var currentNode = start;
         while(currentNode.forwardnodes.Count > 0) {
             if(currentNode.forwardnodes.Count == 1) {
@@ -89,6 +89,15 @@ public class WaypointList{
                 currentNode = currentNode.forwardnodes[0];
                 yield return currentNode;
             }
+        }
+    }
+
+    public static IEnumerable<WaypointNode> TraversePath(WaypointNode start){
+        var currentNode = start;
+        while(currentNode.forwardnodes.Count > 0) {
+                currentNode = currentNode.forwardnodes[0];
+                yield return currentNode;
+            
         }
     }
 }

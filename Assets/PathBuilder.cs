@@ -24,14 +24,27 @@ public class PathBuilder: GridSystem {
         //Draw roads
 
         var waypoints = new WaypointList();
+        this.waypoints = waypoints;
+
         foreach(var coordinate in this.pathbuilderinputs){
             waypoints.AddWaypoint((int)coordinate.x, (int)coordinate.y);
         }
 
 
         //DEBUG TEST
-        foreach(var waypoint in WaypointList.TraversePath(waypoints.head)) {
+        foreach(var waypoint in WaypointList.GetSegmentHeads(waypoints.head)) {
             Debug.Log(waypoint.coordinate);
+        }
+        this.BuildPath(gridManager);
+    }
+
+    private void BuildPath(GridManager gridManager){
+        var previouscoordinate = this.waypoints.coordinate;
+        foreach(var waypoint in WaypointList.TraversePath(this.waypoints.head)) {
+            var direction = (waypoint.coordinate - previouscoordinate).Normalised();
+            do while()
+           GameObject path = Instantiate(this.pathblock);
+        path.transform.position = waypoint.coordinate;
         }
     }
 

@@ -74,4 +74,8 @@ public class GridManager : MonoBehaviour
             }
         }
     }
+
+    public GameObject GetCell(int X, int Y){
+        return this.cells[X][Y];
+    }
 }
